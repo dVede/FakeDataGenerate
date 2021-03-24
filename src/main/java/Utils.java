@@ -16,6 +16,8 @@ public class Utils {
     private static final int ITERATIONS = 10000;
     private static final int KEY_LENGTH = 256;
     private static final String[] NUM_CODE = {"+7", "7", "8"};
+    private static final long START_DATE = Timestamp.valueOf("2000-01-01 00:00:00").getTime();
+    private static final long END_DATE = Timestamp.valueOf("2021-01-01 00:00:00").getTime();
 
     public static String phoneNumberGenerate() {
         return String.format("%s9%d", NUM_CODE[randNum(0, 3)], randNum(100000000, 1000000000 ));
@@ -35,7 +37,7 @@ public class Utils {
         PBEKeySpec spec = new PBEKeySpec(password, salt, ITERATIONS, KEY_LENGTH);
         Arrays.fill(password, Character.MIN_VALUE);
         try {
-            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+            final SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
             return skf.generateSecret(spec).getEncoded();
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new AssertionError("Error while hashing a password: " + e.getMessage(), e);
@@ -45,10 +47,8 @@ public class Utils {
     }
 
     public static Timestamp getTimestamp(){
-        long offset = Timestamp.valueOf("2000-01-01 00:00:00").getTime();
-        long end = Timestamp.valueOf("2021-01-01 00:00:00").getTime();
-        long diff = end - offset + 1;
-        return new Timestamp(offset + (long)(Math.random() * diff));
+        final long diff = END_DATE - START_DATE + 1;
+        return new Timestamp(START_DATE + (long)(Math.random() * diff));
     }
 
     public static Integer getLastId(Statement statement, String column, String table) {

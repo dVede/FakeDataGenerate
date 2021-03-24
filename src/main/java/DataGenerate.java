@@ -37,7 +37,7 @@ public class DataGenerate {
         IntStream.range(0, wishlistQuantity).forEach(i -> WishlistGenerator.generate(args[1], args[2]));
     }
 
-    public static int[] getID() {
+    private static int[] getID() {
         int[] args = new int[6];
         try {
             Connection connection = DatabaseConnection.getConnection();
