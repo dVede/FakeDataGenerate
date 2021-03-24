@@ -7,13 +7,11 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class AuthorBookGenerator {
-    public static void generate(int authorQuantity, int bookQuantity, int authorBookQuantity) {
+    public static void generate(int authorQuantity, int bookQuantity) {
         final Faker faker = new Faker(new Locale("en"));
-        for (int i = 0; i < authorBookQuantity; i++) {
-            int bookID = faker.number().numberBetween(1, bookQuantity + 1);
-            int authorID = faker.number().numberBetween(1, authorQuantity + 1);
-            insert(authorID, bookID);
-        }
+        final int bookID = faker.number().numberBetween(1, bookQuantity + 1);
+        final int authorID = faker.number().numberBetween(1, authorQuantity + 1);
+        insert(authorID, bookID);
     }
 
     private static void insert(int authorID, int bookID) {

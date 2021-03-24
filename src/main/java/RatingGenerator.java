@@ -10,14 +10,12 @@ public class RatingGenerator {
     public static final int RATING_MIN = 1;
     public static final int RATING_MAX= 11;
 
-    public static void generate(int bookQuantity, int consumerQuantity, int ratingQuantity) {
+    public static void generate(int bookQuantity, int consumerQuantity) {
         final Faker faker = new Faker();
-        for (int i = 0; i < ratingQuantity; i++) {
-            int bookID = faker.number().numberBetween(1, bookQuantity + 1);
-            int consumerID = faker.number().numberBetween(1, consumerQuantity + 1);
-            int rating = faker.number().numberBetween(RATING_MIN, RATING_MAX);
-            insert(bookID, consumerID, rating);
-        }
+        final int bookID = faker.number().numberBetween(1, bookQuantity + 1);
+        final int consumerID = faker.number().numberBetween(1, consumerQuantity + 1);
+        final int rating = faker.number().numberBetween(RATING_MIN, RATING_MAX);
+        insert(bookID, consumerID, rating);
     }
 
     private static void insert(int bookID, int consumerID, int rating) {

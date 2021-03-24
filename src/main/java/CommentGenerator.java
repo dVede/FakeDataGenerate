@@ -7,14 +7,12 @@ import java.util.Objects;
 
 public class CommentGenerator {
 
-    public static void generate(int bookQuantity, int consumerQuantity, int commentQuantity) {
+    public static void generate(int bookQuantity, int consumerQuantity) {
         final Faker faker = new Faker();
-        for (int i = 0; i < commentQuantity; i++) {
-            int bookID = faker.number().numberBetween(1, bookQuantity + 1);
-            int consumerID = faker.number().numberBetween(1, consumerQuantity + 1);
-            String comment = faker.lorem().sentence(50, 50);
-            insert(bookID, consumerID, comment);
-        }
+        final int bookID = faker.number().numberBetween(1, bookQuantity + 1);
+        final int consumerID = faker.number().numberBetween(1, consumerQuantity + 1);
+        final String comment = faker.lorem().sentence(50, 50);
+        insert(bookID, consumerID, comment);
     }
 
     private static void insert(int bookID, int consumerID, String comment) {

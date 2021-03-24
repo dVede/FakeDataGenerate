@@ -7,13 +7,11 @@ import java.util.Objects;
 
 public class WishlistGenerator {
 
-    public static void generate(int bookQuantity, int consumerQuantity, int wishlistQuantity) {
+    public static void generate(int bookQuantity, int consumerQuantity) {
         final Faker faker = new Faker();
-        for (int i = 0; i < wishlistQuantity; i++) {
-            int bookID = faker.number().numberBetween(1, bookQuantity + 1);
-            int consumerID = faker.number().numberBetween(1, consumerQuantity + 1);
-            insert(bookID, consumerID);
-        }
+        final int bookID = faker.number().numberBetween(1, bookQuantity + 1);
+        final int consumerID = faker.number().numberBetween(1, consumerQuantity + 1);
+        insert(bookID, consumerID);
     }
 
     private static void insert(int bookID, int consumerID) {

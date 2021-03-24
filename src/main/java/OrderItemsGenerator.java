@@ -10,14 +10,12 @@ public class OrderItemsGenerator {
     private static final int AMOUNT_MAX = 1000;
     private static final int AMOUNT_MIN = 1;
 
-    public static void generate(int bookQuantity, int orderQuantity, int orderItemsQuantity) {
+    public static void generate(int bookQuantity, int orderQuantity) {
         final Faker faker = new Faker();
-        for (int i = 0; i < orderItemsQuantity; i++) {
-            int amount = faker.number().numberBetween(AMOUNT_MIN, AMOUNT_MAX);
-            int bookID = faker.number().numberBetween(1, bookQuantity + 1);
-            int orderID = faker.number().numberBetween(1, orderQuantity + 1);
-            insert(bookID, orderID, amount);
-        }
+        final int amount = faker.number().numberBetween(AMOUNT_MIN, AMOUNT_MAX);
+        final int bookID = faker.number().numberBetween(1, bookQuantity + 1);
+        final int orderID = faker.number().numberBetween(1, orderQuantity + 1);
+        insert(bookID, orderID, amount);
     }
 
     private static void insert(int bookID, int orderID, int amount) {
