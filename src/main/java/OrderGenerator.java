@@ -26,8 +26,8 @@ public class OrderGenerator {
     private static void insert(int consumerID, Timestamp timestamp, String status, double totalSum) {
         try (Connection connection = DatabaseConnection.getConnection();
              Statement statement = Objects.requireNonNull(connection).createStatement()) {
-            statement.execute(String.format(Locale.US,"INSERT INTO \"order\" (consumerid, timestamp, status, totalsum) VALUES (" +
-                    "'%d','%s','%s','%f')", consumerID, timestamp, status, totalSum));
+            statement.execute(String.format(Locale.US,"INSERT INTO \"order\" (consumerid, timestamp, status," +
+                    " totalsum) VALUES ('%d','%s','%s','%f')", consumerID, timestamp, status, totalSum));
         } catch (SQLException e) {
             System.out.println("Error while connecting to DB");
             e.printStackTrace();

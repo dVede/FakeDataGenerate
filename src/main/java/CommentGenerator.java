@@ -6,7 +6,6 @@ import java.sql.Statement;
 import java.util.Objects;
 
 public class CommentGenerator {
-
     public static void generate(int bookQuantity, int consumerQuantity) {
         final Faker faker = new Faker();
         final int bookID = faker.number().numberBetween(1, bookQuantity + 1);

@@ -1,3 +1,5 @@
+import org.apache.commons.lang3.mutable.MutableInt;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -11,21 +13,20 @@ public class GenreGenerator {
     private static final String SEPARATOR2 = "/";
 
     public static void generate() throws IOException {
-        AtomicInteger i = new AtomicInteger(1);
-        Files.readAllLines(Paths.get("src/data/genre")).forEach(genre ->{
+        MutableInt i = new MutableInt(1);
+        for (String genre : Files.readAllLines(Paths.get("src/data/genre"))) {
             String[] genres = genre.split(SEPARATOR1);
             String parentGenre = genres[0];
-            int parentID = i.get();
+            int parentID = i.getAndIncrement();
             insert(parentGenre, null);
-            i.getAndIncrement();
             if (genres.length > 1) {
                 String[] genresList = genres[1].split(SEPARATOR2);
                 for (String s : genresList) {
                     insert(s, parentID);
-                    i.getAndIncrement();
+                    i.incrementAndGet();
                 }
             }
-        });
+        }
     }
 
     private static void insert(String genre, Integer parentID) {

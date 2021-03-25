@@ -31,8 +31,9 @@ public class ConsumerGenerator {
     private static void insert(String login, String hash, String salt, String email, String address, String telephone) {
         try (Connection connection = DatabaseConnection.getConnection();
              Statement statement = Objects.requireNonNull(connection).createStatement()) {
-            statement.execute(String.format("INSERT INTO consumer (login, password_hash, password_salt, email, address, telephone) VALUES (" +
-                    "'%s','%s','%s','%s','%s','%s')", login, hash, salt, email, address, telephone));
+            statement.execute(String.format("INSERT INTO consumer (login, password_hash, password_salt, email," +
+                    " address, telephone) VALUES ('%s','%s','%s','%s','%s','%s')", login, hash, salt, email,
+                    address, telephone));
 
         } catch (SQLException e) {
             System.out.println("Error while connecting to DB");

@@ -37,12 +37,10 @@ public class BookGenerator {
         try (Connection connection = DatabaseConnection.getConnection();
              Statement statement = Objects.requireNonNull(connection).createStatement()) {
             statement.execute(String.format(Locale.US,"INSERT INTO book " +
-                            "(publisherid, isbn, imageurl, title, year, pages, numberinstock, price, description) VALUES (" +
-                    "'%d','%s','%s','%s','%s','%s','%d','%f','%s')", publisherID, ISBN, imageURL, title, year, pages, numberInStock,
-                    price, description));
+                            "(publisherid, isbn, imageurl, title, year, pages, numberinstock, price, description)" +
+                            "VALUES ('%d','%s','%s','%s','%s','%s','%d','%f','%s')", publisherID, ISBN, imageURL,
+                    title, year, pages, numberInStock, price, description));
         } catch (SQLException e) {
-            System.out.printf("'%d','%s','%s','%s','%s','%s','%d','%f','%s')", publisherID, ISBN, imageURL, title, year,
-                    pages, numberInStock, price, description);
             System.out.println("Error while connecting to DB");
             e.printStackTrace();
         }
