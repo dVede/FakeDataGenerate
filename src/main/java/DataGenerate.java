@@ -10,13 +10,13 @@ import java.util.stream.IntStream;
 public class DataGenerate {
 
     public static void main(String[] args) throws IOException {
-        TransactionCreate transactionCreate = new TransactionCreate();
+        /*TransactionCreate transactionCreate = new TransactionCreate();
         Utils.deleteConsumerInfo();
         IntStream.range(0, 100).forEach(i -> ConsumerGenerator.generate());
-        transactionCreate.createThreads(1000, 8);
-        /*generateDatabase(true, 500, 500, 500,
+        transactionCreate.createThreads(1000, 8);*/
+        generateDatabase(true, 500, 500, 500,
                 500, 500, 500, 500,
-                500, 500, 500, 500);*/
+                500, 500, 500, 500);
     }
 
     private static void generateDatabase(boolean isFirst, int publisherQuantity, int authorQuantity, int consumerQuantity,
