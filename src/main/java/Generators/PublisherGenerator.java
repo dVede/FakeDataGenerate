@@ -1,3 +1,5 @@
+package Generators;
+
 import com.github.javafaker.Faker;
 
 import java.sql.Connection;
@@ -7,16 +9,12 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class PublisherGenerator {
-
-    private static final String WHITE_SPACE = " ";
-    private static final String ZIP_CODE= "###### ";
-
     public static void generate() {
         final Faker faker = new Faker(new Locale("ru"));
         final Faker faker2 = new Faker(new Locale("en"));
-        final String name = faker.book().publisher().replace("'", "''");;
+        final String name = faker.book().publisher().replace(GeneratorUtils.APOSTROPHE, GeneratorUtils.DOUBLE_APOSTROPHE);
         final String address = faker.address().fullAddress();
-        final String resAddress = address.replace(ZIP_CODE, faker.address().zipCode() + WHITE_SPACE);
+        final String resAddress = address.replace(GeneratorUtils.ZIP_CODE, faker.address().zipCode());
         final String email = faker2.internet().emailAddress();
         insert(name, resAddress, email);
     }

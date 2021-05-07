@@ -1,3 +1,5 @@
+package Generators;
+
 import com.github.javafaker.Faker;
 
 import java.sql.Connection;
@@ -7,10 +9,9 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class AuthorGenerator {
-    private static final String WHITE_SPACE= " ";
     public static void generate() {
         final Faker faker = new Faker(new Locale("ru"));
-        final String[] name = faker.name().nameWithMiddle().split(WHITE_SPACE);
+        final String[] name = faker.name().nameWithMiddle().split(GeneratorUtils.WHITE_SPACE);
         final String imageURL = faker.avatar().image();
         insert(name[0], name[1], name[2], imageURL);
     }

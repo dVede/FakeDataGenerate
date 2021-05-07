@@ -1,3 +1,5 @@
+package Generators;
+
 import com.github.javafaker.Faker;
 
 import java.sql.Connection;
@@ -18,8 +20,7 @@ public class AuthorBookGenerator {
         try (Connection connection = DatabaseConnection.getConnection();
              Statement statement = Objects.requireNonNull(connection).createStatement()) {
             statement.execute(String.format("INSERT INTO author_book (authorid, bookid) VALUES ('%d','%d')" +
-                            " ON CONFLICT (authorid, bookid) DO NOTHING",
-                    authorID, bookID));
+                            " ON CONFLICT (authorid, bookid) DO NOTHING", authorID, bookID));
         } catch (SQLException e) {
             System.out.println("Error while connecting to DB");
             e.printStackTrace();

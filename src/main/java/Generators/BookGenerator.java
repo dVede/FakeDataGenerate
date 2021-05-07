@@ -1,3 +1,5 @@
+package Generators;
+
 import com.github.javafaker.Faker;
 
 import java.sql.Connection;
@@ -8,27 +10,17 @@ import java.util.Objects;
 
 public class BookGenerator {
 
-    private static final int START_YEAR = 1000;
-    private static final int END_YEAR = 2022;
-    private static final int MIN_PAGES = 200;
-    private static final int MAX_PAGES = 7000;
-    private static final int MIN_STOCK = 0;
-    private static final int MAX_STOCK = 1000;
-    private static final int MIN_PRICE = 300;
-    private static final int MAX_PRICE = 2000;
-    private static final int WORDS_NUM = 50;
-
     public static void generate(int publisherQuantity) {
         final Faker faker = new Faker(new Locale("ru"));
         final int publisherID = faker.number().numberBetween(1, publisherQuantity + 1);
         final String ISBN = faker.code().isbn13();
         final String imageURL = faker.avatar().image();
-        final String title = faker.book().title().replace("'", "''");
-        final String year = String.valueOf(faker.number().numberBetween(START_YEAR, END_YEAR));
-        final String pages = String.valueOf(faker.number().numberBetween(MIN_PAGES, MAX_PAGES));
-        final int numberInStock = faker.number().numberBetween(MIN_STOCK, MAX_STOCK);
-        final double price = faker.number().randomDouble(2, MIN_PRICE, MAX_PRICE);
-        final String description = faker.lorem().sentence(WORDS_NUM, WORDS_NUM);
+        final String title = faker.book().title().replace(GeneratorUtils.APOSTROPHE, GeneratorUtils.DOUBLE_APOSTROPHE);
+        final String year = String.valueOf(faker.number().numberBetween(GeneratorUtils.START_YEAR, GeneratorUtils.END_YEAR));
+        final String pages = String.valueOf(faker.number().numberBetween(GeneratorUtils.MIN_PAGES, GeneratorUtils.MAX_PAGES));
+        final int numberInStock = faker.number().numberBetween(GeneratorUtils.MIN_STOCK, GeneratorUtils.MAX_STOCK);
+        final double price = faker.number().randomDouble(2, GeneratorUtils.MIN_PRICE, GeneratorUtils.MAX_PRICE);
+        final String description = faker.lorem().sentence(GeneratorUtils.WORDS_NUM, GeneratorUtils.WORDS_NUM);
         insert(publisherID, ISBN, imageURL, title, year, pages, numberInStock, price, description);
     }
 

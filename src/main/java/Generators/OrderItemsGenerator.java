@@ -1,3 +1,5 @@
+package Generators;
+
 import com.github.javafaker.Faker;
 
 import java.sql.Connection;
@@ -7,12 +9,9 @@ import java.util.Objects;
 
 public class OrderItemsGenerator {
 
-    private static final int AMOUNT_MAX = 1000;
-    private static final int AMOUNT_MIN = 1;
-
     public static void generate(int bookQuantity, int orderQuantity) {
         final Faker faker = new Faker();
-        final int amount = faker.number().numberBetween(AMOUNT_MIN, AMOUNT_MAX);
+        final int amount = faker.number().numberBetween(GeneratorUtils.AMOUNT_MIN, GeneratorUtils.AMOUNT_MAX);
         final int bookID = faker.number().numberBetween(1, bookQuantity + 1);
         final int orderID = faker.number().numberBetween(1, orderQuantity + 1);
         insert(bookID, orderID, amount);

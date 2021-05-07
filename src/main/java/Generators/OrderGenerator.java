@@ -1,3 +1,5 @@
+package Generators;
+
 import com.github.javafaker.Faker;
 
 import java.sql.Connection;
@@ -9,17 +11,13 @@ import java.util.Objects;
 
 public class OrderGenerator {
 
-    private static final String[] STATUS_LIST = {"WAITING_FOR_PAYMENT", "IN_PROGRESS", "COMPLETED", "CANCELLED"};
-    private static final int MIN_SUM = 1000;
-    private static final int MAX_SUM = 10000;
-
     public static void generate(int consumerQuantity) {
         final Faker faker = new Faker(new Locale("en"));
-        final int randNumber = faker.number().numberBetween(0, STATUS_LIST.length);
+        final int randNumber = faker.number().numberBetween(0, GeneratorUtils.STATUS_LIST.length);
         final int consumerID = faker.number().numberBetween(1, consumerQuantity + 1);
-        final Timestamp timestamp = Utils.getTimestamp();
-        final String status = STATUS_LIST[randNumber];
-        final double totalSum = faker.number().randomDouble(2, MIN_SUM, MAX_SUM);
+        final Timestamp timestamp = GeneratorUtils.getTimestamp();
+        final String status = GeneratorUtils.STATUS_LIST[randNumber];
+        final double totalSum = faker.number().randomDouble(2, GeneratorUtils.MIN_SUM, GeneratorUtils.MAX_SUM);
         insert(consumerID, timestamp, status, totalSum);
     }
 

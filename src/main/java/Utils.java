@@ -1,55 +1,20 @@
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
+import Generators.DatabaseConnection;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import static Generators.DatabaseConnection.getConnection;
 
 public class Utils {
-
-    private static final Random RANDOM = new SecureRandom();
-    private static final int ITERATIONS = 10000;
-    private static final int KEY_LENGTH = 256;
-    private static final String[] NUM_CODE = {"+7", "7", "8"};
-    private static final long START_DATE = Timestamp.valueOf("2000-01-01 00:00:00").getTime();
-    private static final long END_DATE = Timestamp.valueOf("2021-01-01 00:00:00").getTime();
-
-    public static String phoneNumberGenerate() {
-        return String.format("%s9%d", NUM_CODE[randNum(0, 3)], randNum(100000000, 1000000000 ));
-    }
-
-    public static int randNum(int a, int b) {
-        return (int) (Math.random() * (b - a)) + a;
-    }
-
-    public static byte[] saltGenerate() {
-        byte[] salt = new byte[32];
-        RANDOM.nextBytes(salt);
-        return salt;
-    }
-
-    public static byte[] hash(char[] password, byte[] salt) {
-        PBEKeySpec spec = new PBEKeySpec(password, salt, ITERATIONS, KEY_LENGTH);
-        Arrays.fill(password, Character.MIN_VALUE);
-        try {
-            final SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-            return skf.generateSecret(spec).getEncoded();
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new AssertionError("Error while hashing a password: " + e.getMessage(), e);
-        } finally {
-            spec.clearPassword();
-        }
-    }
-
-    public static Timestamp getTimestamp(){
-        final long diff = END_DATE - START_DATE + 1;
-        return new Timestamp(START_DATE + (long)(Math.random() * diff));
-    }
 
     public static Integer getLastId(Statement statement, String column, String table) {
         Integer id = null;
@@ -61,5 +26,71 @@ public class Utils {
             System.out.println("Error while connecting to DB");
         }
         return id;
+    }
+
+    public static void deleteAllInfo() {
+        try (Connection connection = getConnection();
+             Statement statement = Objects.requireNonNull(connection).createStatement()) {
+            statement.execute("DELETE FROM author_book;" +
+                    "DELETE FROM comment;\n" +
+                    "DELETE FROM wishlist;\n" +
+                    "DELETE FROM rating;\n" +
+                    "DELETE FROM genres_book;\n" +
+                    "DELETE FROM orderitems;\n" +
+                    "DELETE FROM \"order\";\n" +
+                    "DELETE FROM consumer;\n" +
+                    "DELETE FROM author;\n" +
+                    "DELETE FROM book;\n" +
+                    "DELETE FROM publisher;\n");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void deleteConsumerInfo() {
+        try (Connection connection = getConnection();
+             Statement statement = Objects.requireNonNull(connection).createStatement()) {
+            statement.execute("DELETE FROM consumer;");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static class BarAction implements Runnable {
+        public void run() {
+            System.out.println("Barrier opened");
+        }
+    }
+
+    public static int getPublisherLastId() {
+        int id = 0;
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = Objects.requireNonNull(connection).createStatement()){
+            id = Utils.getLastId(statement, "id", "publisher");
+        } catch (SQLException throwables) {
+            System.out.println("Error while connecting to DB");
+            throwables.printStackTrace();
+        }
+        return id;
+    }
+
+    public static int getConsumerLastId() {
+        int id = 0;
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = Objects.requireNonNull(connection).createStatement()){
+            id = Utils.getLastId(statement, "id", "consumer");
+        } catch (SQLException throwables) {
+            System.out.println("Error while connecting to DB");
+            throwables.printStackTrace();
+        }
+        return id;
+    }
+
+    public static void writeInFile(String path, List<String> list) throws IOException {
+        final List<String> res = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            final String time = list.get(i);
+            res.add(i, time);
+        }
+        Files.write(Paths.get(path), res, StandardCharsets.UTF_8);
     }
 }
