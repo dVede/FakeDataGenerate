@@ -9,7 +9,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class InsertTransactionThread extends TransactionThread {
     private final List<Consumer> consumers;
@@ -25,19 +24,19 @@ public class InsertTransactionThread extends TransactionThread {
         final List<String> timeArr = new ArrayList<>();
         final String sql = "INSERT INTO consumer (login, password_hash, password_salt, email," +
                 " address, telephone) VALUES ('%s','%s','%s','%s','%s','%s')";
-        AtomicBoolean flag = new AtomicBoolean(false);
+        boolean check = false;
         for (Consumer consumer : consumers) {
             final long start = System.nanoTime();
             do {
                 try (Statement statement = connection.createStatement()) {
                     statement.execute(String.format(sql, consumer.getLogin(), consumer.getHashed(),
                             consumer.getSalt(), consumer.getEmail(), consumer.getAddress(), consumer.getTelephone()));
-                    flag.set(false);
+                    check = false;
                 } catch (SQLException throwables) {
-                    if (throwables.getSQLState().equals(SERIALIZABLE_ERROR)) flag.set(true);
+                    if (throwables.getSQLState().equals(SERIALIZABLE_ERROR)) check = true;
                     else throwables.printStackTrace();
                 }
-            } while (flag.get());
+            } while (check);
             final long end = System.nanoTime();
             timeArr.add(String.format("%d %d", end - super.getThreadStartTime(), end-start));
         }

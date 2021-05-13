@@ -8,11 +8,12 @@ import java.sql.Statement;
 import java.util.Objects;
 
 public class BookGenresGenerator {
-    public static void generate(int bookQuantity, int genreQuantity) {
+    public static void generate(int bookQuantity) {
         final Faker faker = new Faker();
-        final int genreID = faker.number().numberBetween(1, genreQuantity + 1);
-        final int bookID = faker.number().numberBetween(1, bookQuantity + 1);
-        insert(bookID, genreID);
+        for (int i = 1; i < bookQuantity + 1; i++) {
+            final int genreID = faker.number().numberBetween(1, 60);
+            insert(i, genreID);
+        }
     }
 
     private static void insert(int bookID, int genreID) {

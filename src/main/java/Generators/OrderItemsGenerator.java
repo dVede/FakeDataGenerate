@@ -11,10 +11,11 @@ public class OrderItemsGenerator {
 
     public static void generate(int bookQuantity, int orderQuantity) {
         final Faker faker = new Faker();
-        final int amount = faker.number().numberBetween(GeneratorUtils.AMOUNT_MIN, GeneratorUtils.AMOUNT_MAX);
-        final int bookID = faker.number().numberBetween(1, bookQuantity + 1);
-        final int orderID = faker.number().numberBetween(1, orderQuantity + 1);
-        insert(bookID, orderID, amount);
+        for (int i = 1; i < orderQuantity + 1; i++) {
+            final int amount = faker.number().numberBetween(GeneratorUtils.AMOUNT_MIN, GeneratorUtils.AMOUNT_MAX);
+            final int bookID = faker.number().numberBetween(1, bookQuantity + 1);
+            insert(bookID, i, amount);
+        }
     }
 
     private static void insert(int bookID, int orderID, int amount) {

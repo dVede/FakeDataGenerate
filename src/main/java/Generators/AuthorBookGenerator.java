@@ -10,10 +10,12 @@ import java.util.Objects;
 
 public class AuthorBookGenerator {
     public static void generate(int authorQuantity, int bookQuantity) {
-        final Faker faker = new Faker(new Locale("en"));
-        final int bookID = faker.number().numberBetween(1, bookQuantity + 1);
-        final int authorID = faker.number().numberBetween(1, authorQuantity + 1);
-        insert(authorID, bookID);
+        for (int i = 0; i < bookQuantity + 1; i++) {
+            final Faker faker = new Faker(new Locale("en"));
+            final int authorID = faker.number().numberBetween(1, authorQuantity + 1);
+            insert(authorID, i);
+        }
+
     }
 
     private static void insert(int authorID, int bookID) {

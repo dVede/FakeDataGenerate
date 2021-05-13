@@ -10,13 +10,8 @@ import java.util.stream.IntStream;
 public class DataGenerate {
 
     public static void main(String[] args) throws IOException {
-        /*TransactionCreate transactionCreate = new TransactionCreate();
-        Utils.deleteConsumerInfo();
-        IntStream.range(0, 100).forEach(i -> ConsumerGenerator.generate());
-        transactionCreate.createThreads(1000, 8);*/
-        generateDatabase(true, 500, 500, 500,
-                500, 500, 500, 500,
-                500, 500, 500, 500);
+        TransactionCreate transactionCreate = new TransactionCreate();
+        transactionCreate.createThreads(100, 4);
     }
 
     private static void generateDatabase(boolean isFirst, int publisherQuantity, int authorQuantity, int consumerQuantity,
@@ -33,12 +28,13 @@ public class DataGenerate {
 
         final int[] args = getID();
 
-        IntStream.range(0, authorBookQuantity).forEach(i -> AuthorBookGenerator.generate(args[0], args[1]));
-        IntStream.range(0, bookGenresQuantity).forEach(i -> BookGenresGenerator.generate(args[1], args[4]));
-        IntStream.range(0, commentQuantity).forEach(i -> CommentGenerator.generate(args[1], args[2]));
-        IntStream.range(0, orderItemsQuantity).forEach(i -> OrderItemsGenerator.generate(args[1], args[3]));
+        AuthorBookGenerator.generate(args[0], args[1]);
+        BookGenresGenerator.generate(args[1]);
+        OrderItemsGenerator.generate(args[1], args[3]);
         IntStream.range(0, ratingQuantity).forEach(i -> RatingGenerator.generate(args[1], args[2]));
         IntStream.range(0, wishlistQuantity).forEach(i -> WishlistGenerator.generate(args[1], args[2]));
+        IntStream.range(0, commentQuantity).forEach(i -> CommentGenerator.generate(args[1], args[2]));
+
     }
 
     private static int[] getID() {

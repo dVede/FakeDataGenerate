@@ -19,18 +19,18 @@ public class SelectTransactionThread extends TransactionThread {
     @Override
     public List<String> transaction(int quantity, Connection connection) {
         final List<String> timeArr = new ArrayList<>();
-        AtomicBoolean flag = new AtomicBoolean(false);
+        boolean check = false;
         for (int i = 0; i < quantity; i++) {
             final long start = System.nanoTime();
             do {
                 try (Statement statement = connection.createStatement()) {
                     statement.execute("SELECT * FROM consumer WHERE telephone LIKE '%1'");
-                    flag.set(false);
+                    check = false;
                 } catch (SQLException throwables) {
-                    if (throwables.getSQLState().equals(SERIALIZABLE_ERROR)) flag.set(true);
+                    if (throwables.getSQLState().equals(SERIALIZABLE_ERROR)) check = true;
                     else throwables.printStackTrace();
                 }
-            } while (flag.get());
+            } while (check);
             final long end = System.nanoTime();
             timeArr.add(String.format("%d %d", end - super.getThreadStartTime(), end-start));
         }
